@@ -6,22 +6,41 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    h2 {
-      color: navy;
-    }
-    .book {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-    }
-    img {
-      max-height: 150px;
-    }
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #ffffff;
+  }
+
+  h1, h2 {
+    color: navy;
+  }
+
+  a {
+    color: darkblue;
+    text-decoration: none;
+  }
+
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .book {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+  }
+
+  .book img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+  }
   </style>
 </head>
 <body>
@@ -56,24 +75,26 @@
     $('#single-book').html(html);
   });
 
-    // Load book list JSON
-    $.getJSON('google-books-search.json', function(data) {
-      let html = '';
-      data.items.forEach(item => {
-        const book = item.volumeInfo;
-        html += `
-          <div class="book">
-            <h3>${book.title}</h3>
-            <p><strong>Authors:</strong> ${book.authors?.join(', ') || 'N/A'}</p>
-            <p><strong>Publisher:</strong> ${book.publisher || 'N/A'}</p>
-            <p><strong>Published Date:</strong> ${book.publishedDate || 'N/A'}</p>
-            ${book.imageLinks?.thumbnail ? `<img src="${book.imageLinks.thumbnail}" alt="Book cover">` : ''}
-            <p><a href="${book.previewLink}" target="_blank">Preview</a></p>
-          </div>
-        `;
-      });
-      $('#book-list').html(html);
-    });
+   // Load book list JSON
+$.getJSON('google-books-search.json', function(data) {
+  let html = '<div class="book-grid">';
+  data.items.forEach(item => {
+    const book = item.volumeInfo;
+    html += `
+      <div class="book">
+        <h3>${book.title}</h3>
+        ${book.subtitle ? `<p><em>${book.subtitle}</em></p>` : ''}
+        <p><strong>Authors:</strong> ${book.authors?.join(', ') || 'N/A'}</p>
+        <p><strong>Publisher:</strong> ${book.publisher || 'N/A'} (${book.publishedDate || 'N/A'})</p>
+        ${book.description ? `<p>${book.description.substring(0, 100)}...</p>` : ''}
+        ${book.imageLinks?.thumbnail ? `<img src="${book.imageLinks.thumbnail}" alt="Book cover">` : ''}
+        <p><a href="${book.previewLink}" target="_blank">Preview</a></p>
+      </div>
+    `;
+  });
+  html += '</div>';
+  $('#book-list').html(html);
+});
   </script>
 </body>
 </html>
