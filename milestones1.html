@@ -35,21 +35,26 @@
   <div id="book-list"></div>
 
   <script>
-    // Load single book JSON
-    $.getJSON('google-books-book.json', function(data) {
-      const book = data.volumeInfo;
-      const html = `
-        <div class="book">
-          <h3>${book.title}</h3>
-          <p><strong>Authors:</strong> ${book.authors?.join(', ') || 'N/A'}</p>
-          <p><strong>Publisher:</strong> ${book.publisher || 'N/A'}</p>
-          <p><strong>Published Date:</strong> ${book.publishedDate || 'N/A'}</p>
-          ${book.imageLinks?.thumbnail ? `<img src="${book.imageLinks.thumbnail}" alt="Book cover">` : ''}
-          <p><a href="${book.previewLink}" target="_blank">Preview</a></p>
-        </div>
-      `;
-      $('#single-book').html(html);
-    });
+      // Load single book JSON
+  $.getJSON('google-books-book.json', function(data) {
+    const book = data.volumeInfo;
+    const identifiers = book.industryIdentifiers?.map(id => `${id.type}: ${id.identifier}`).join('<br>') || 'N/A';
+    const html = `
+      <div class="book">
+        <h3>${book.title}</h3>
+        ${book.subtitle ? `<p><em>${book.subtitle}</em></p>` : ''}
+        <p><strong>Authors:</strong> ${book.authors?.join(', ') || 'N/A'}</p>
+        <p><strong>Publisher:</strong> ${book.publisher || 'N/A'} (${book.publishedDate || 'N/A'})</p>
+        ${book.categories ? `<p><strong>Categories:</strong> ${book.categories.join(', ')}</p>` : ''}
+        ${book.printType ? `<p><strong>Print Type:</strong> ${book.printType}</p>` : ''}
+        ${book.description ? `<p><strong>Description:</strong> ${book.description}</p>` : ''}
+        ${book.imageLinks?.thumbnail ? `<img src="${book.imageLinks.thumbnail}" alt="Book cover">` : ''}
+        <p><strong>Identifiers:</strong><br>${identifiers}</p>
+        <p><a href="${book.previewLink}" target="_blank">Preview</a></p>
+      </div>
+    `;
+    $('#single-book').html(html);
+  });
 
     // Load book list JSON
     $.getJSON('google-books-search.json', function(data) {
