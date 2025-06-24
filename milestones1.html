@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Milestone 1 – Book JSON Display</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h2 {
+      color: navy;
+    }
+    .book {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    img {
+      max-height: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Milestone 1: JSON Book Display</h1>
+
+  <h2>Single Book</h2>
+  <div id="single-book"></div>
+
+  <h2>Book List</h2>
+  <div id="book-list"></div>
+
+  <script>
+    // Load single book JSON
+    $.getJSON('google-books-book.json', function(data) {
+      const book = data.volumeInfo;
+      const html = `
+        <div class="book">
+          <h3>${book.title}</h3>
+          <p><strong>Authors:</strong> ${book.authors?.join(', ') || 'N/A'}</p>
+          <p><strong>Publisher:</strong> ${book.publisher || 'N/A'}</p>
+          <p><strong>Published Date:</strong> ${book.publishedDate || 'N/A'}</p>
+          ${book.imageLinks?.thumbnail ? `<img src="${book.imageLinks.thumbnail}" alt="Book cover">` : ''}
+          <p><a href="${book.previewLink}" target="_blank">Preview</a></p>
+        </div>
+      `;
+      $('#single-book').html(html);
+    });
+
+    // Load book list JSON
+    $.getJSON('google-books-search.json', function(data) {
+      let html = '';
+      data.items.forEach(item => {
+        const book = item.volumeInfo;
+        html += `
+          <div class="book">
+            <h3>${book.title}</h3>
+            <p><strong>Authors:</strong> ${book.authors?.join(', ') || 'N/A'}</p>
+            <p><strong>Publisher:</strong> ${book.publisher || 'N/A'}</p>
+            <p><strong>Published Date:</strong> ${book.publishedDate || 'N/A'}</p>
+            ${book.imageLinks?.thumbnail ? `<img src="${book.imageLinks.thumbnail}" alt="Book cover">` : ''}
+            <p><a href="${book.previewLink}" target="_blank">Preview</a></p>
+          </div>
+        `;
+      });
+      $('#book-list').html(html);
+    });
+  </script>
+</body>
+</html>
