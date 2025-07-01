@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Book Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="milestones2.html">Home</a> |
+        <a href="bookshelf.html">My Bookshelf</a>
+    </nav>
+
+    <h1>Book Details</h1>
+    <div id="bookInfo"></div>
+
+    <script>
+    function getBookIdFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+    }
+
+    const bookId = getBookIdFromURL();
+    let html = '';
+
+    // Bookshelf
+    if (bookId === 'book1') {
+        html = `
+            <h2>The Summer I Turned Pretty</h2>
+            <p><strong>Authors:</strong> Jenny Han</p>
+            <p><strong>Publisher:</strong> Simon and Schuster</p>
+            <p><strong>Published:</strong> 2025-05-06</p>
+            <p><strong>Description:</strong> Now an Original Series on Prime Video!</p>
+            <p>Belly has an unforgettable summer in this stunning start to the <em>Summer I Turned Pretty</em> series from the <em>New York Times</em> bestselling author of <em>To All the Boys I’ve Loved Before</em>, Jenny Han. This deluxe edition features foil on the cover and stenciled sprayed edges!</p>
+            <p><em>Some summers are just destined to be pretty.</em></p>
+            <p>Belly measures her life in summers. Everything good, everything magical happens between the months of June and August. Winters are simply a time to count the weeks until the next summer, a place away from the beach house, away from Susannah, and most importantly, away from Jeremiah and Conrad. They are the boys that Belly has known since her very first summer—they have been her brother figures, her crushes, and everything in between. But one summer, one wonderful and terrible summer, the more everything changes, the more it all ends up just the way it should have been all along.</p>
+            <img src="http://books.google.com/books/publisher/content?id=0QhuEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl" alt="The Summer I Turned Pretty cover" style="margin-top: 20px; width: 140px;">
+            <p><a href="https://books.google.com/books?id=0QhuEAAAQBAJ" target="_blank">Preview this book</a></p>
+        `;
+        document.getElementById('bookInfo').innerHTML = html;
+    } else if (bookId === 'book2') {
+        html = `
+            <h2>The Lightning Thief</h2>
+            <p><strong>Authors:</strong> Rick Riordan</p>
+            <p><strong>Publisher:</strong> Hyperion Books for Children</p>
+            <p><strong>Published:</strong> 2022-05-03</p>
+            <p><strong>Description:</strong> "Percy Jackson is about to be kicked out of boarding school ... again. And that's the least of his troubles. Lately, mythological monsters and the gods of Mount Olympus seem to be walking straight out of the pages of Percy's Greek mythology textbook and into his life. And worse, he's angered a few of them. Zeus's master lightning bolt has been stolen, and Percy is the prime suspect. Now Percy and his friends have just ten days to find and return Zeus's stolen property and bring peace to a warring Mount Olympus. But to succeed on his quest, Percy will have to do more than catch the true thief: he must comes to terms with the father who abandoned him; solve the riddle of the Oracle, which warns him of betrayal by a friend; and unravel a treachery more powerful than the gods themselves."--</p>
+            <img src="http://books.google.com/books/content?id=vukJMQAACAAJ&printsec=frontcover&img=1&zoom=1" alt="The Lightning Thief cover" style="margin-top: 20px; width: 140px;">
+            <p><a href="https://books.google.com/books?id=vukJMQAACAAJ&hl=&source=gbs_api" target="_blank">Preview this book</a></p>
+        `;
+        document.getElementById('bookInfo').innerHTML = html;
+    } else {
+        // Google Books API
+        $(document).ready(function () {
+            const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+            $.getJSON(url, function (data) {
+                const info = data.volumeInfo;
+                const html = `
+                    <h2>${info.title}</h2>
+                    ${info.subtitle ? `<h3>${info.subtitle}</h3>` : ''}
+                    <p><strong>Authors:</strong> ${info.authors?.join(', ') || 'N/A'}</p>
+                    <p><strong>Publisher:</strong> ${info.publisher || 'N/A'}</p>
+                    <p><strong>Published:</strong> ${info.publishedDate || 'N/A'}</p>
+                    <p><strong>Description:</strong> ${info.description || 'No description available.'}</p>
+                    ${info.imageLinks?.thumbnail ? `<img src="${info.imageLinks.thumbnail}" alt="Book cover" style="margin-top: 20px; width: 140px;">` : ''}
+                    ${info.previewLink ? `<p><a href="${info.previewLink}" target="_blank">Preview this book</a></p>` : ''}
+                `;
+                $('#bookInfo').html(html);
+            });
+        });
+    }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Book Search – Milestone 2</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="milestones2.html">Home</a> |
+        <a href="bookshelf.html">My Bookshelf</a>
+    </nav>
+
+    <h1>Google Books Search</h1>
+
+    <!-- Search -->
+    <input type="text" id="searchTerm" placeholder="Enter search keyword">
+    <button id="searchBtn">Search</button>
+
+    <!-- Page selector -->
+    <label for="pageSelector">Page:</label>
+    <select id="pageSelector"></select>
+
+    <!-- Results -->
+    <div id="results"></div>
+
+    <script>
+        let allBooks = [];
+
+        $('#searchBtn').click(function () {
+            const term = $('#searchTerm').val();
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(term)}&maxResults=40`;
+
+            $.getJSON(url, function (data) {
+                allBooks = data.items || [];
+                const totalPages = Math.ceil(allBooks.length / 10);
+
+                // Page dropdown
+                let options = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    options += `<option value="${i}">${i}</option>`;
+                }
+                $('#pageSelector').html(options);
+
+                displayPage(1); //  Shows first page
+            });
+        });
+
+        // Change page
+        $('#pageSelector').on('change', function () {
+            const page = parseInt($(this).val());
+            displayPage(page);
+        });
+
+        // Display books for page
+        function displayPage(page) {
+            const start = (page - 1) * 10;
+            const end = start + 10;
+            const pageBooks = allBooks.slice(start, end);
+
+            let html = '';
+            pageBooks.forEach(book => {
+                const info = book.volumeInfo;
+                html += `
+        <div class="book">
+          <img src="${info.imageLinks?.thumbnail || ''}" alt="No image">
+          <p><a href="details.html?id=${book.id}">${info.title}</a></p>
+        </div>
+      `;
+            });
+            $('#results').html(html);
+        }
+    </script>
+
+</body>
+
+</html>

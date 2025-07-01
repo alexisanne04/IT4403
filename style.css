@@ -1,0 +1,22 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+nav a {
+  margin-right: 10px;
+  text-decoration: none;
+  color: navy;
+}
+
+.book {
+  margin: 15px 0;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.book img {
+  height: 100px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
