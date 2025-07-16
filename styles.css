@@ -89,3 +89,80 @@ button {
   max-width: 600px;
   margin-top: 20px;
 }
+
+#searchResults .book,
+#bookshelfResults .book {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  transition: all 0.3s;
+}
+
+.grid .book {
+  display: inline-block;
+  width: 180px;
+  vertical-align: top;
+  text-align: center;
+}
+
+.list .book {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  text-align: left;
+}
+
+.list .book img {
+  width: 80px;
+  margin-right: 20px;
+}
+
+.book.list {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.book.list img {
+    width: 80px;
+    height: auto;
+}
+
+/* Default grid view */
+#searchResults .book,
+#bookshelfResults .book {
+  display: inline-block;
+  width: 180px;
+  margin: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: center;
+  vertical-align: top;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* List view styling */
+#searchResults .book.list,
+#bookshelfResults .book.list {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin: 10px auto;
+  text-align: left;
+}
+
+.book img {
+  max-width: 100px;
+  margin-right: 20px;
+}
+
+.book.list img {
+  max-width: 80px;
+}
+
+.book p {
+  margin: 5px 0;
+}
+
